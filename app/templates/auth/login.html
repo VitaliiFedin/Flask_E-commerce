@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% from "_formhelpers.html" import render_field %}
-{% block title %} Register {% endblock %}
+{% block title %} Login {% endblock %}
 
 {% block content %}
 {% for message in get_flashed_messages() %}
 <div class="alert alert-warning">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
-    {{ message }} Go to <a href="{{url_for('auth.login')}}">Login</a>
+    {{ message }}
     </div>
   {% endfor %}
 <div class="text-center h1 text-danger">Register</div>
@@ -14,16 +14,12 @@
 <form method=post>
   <div>
       {{ form.csrf_token }}
-    {{ render_field(form.username, class='form-control') }}
-    {{render_field(form.name, class='form-control')}}
     {{ render_field(form.email, class='form-control') }}
     {{ render_field(form.password, class='form-control') }}
-    {{ render_field(form.confirm, class='form-control') }}
+    {{ render_field(form.remember_me, class='form-control') }}
       <br>
-    <input type="file" name="photo">
   </div>
-    <br>
-    <input type="submit" class="btn btn-info" value="Register">
+    <input type="submit" class="btn btn-info" value="Login">
 </form>
 </div>
 {% endblock %}
