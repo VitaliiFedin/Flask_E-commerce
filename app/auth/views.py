@@ -11,9 +11,7 @@ from flask_login import login_user, login_required, logout_user
 def register():
     form = RegisterForm()
     if form.validate():
-        user = User.query.filter_by(email=form.email.data.
-                                    lower()).first()
-        print(user)
+        user = User.query.filter_by(email=form.email.data.lower()).first()
         if user:
             flash('This email is already registered.')
             return render_template('register.html', form=form)
