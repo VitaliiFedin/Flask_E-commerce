@@ -6,3 +6,18 @@
 }
 
 
+.register-form{
+    padding: 10px;
+    max-width: 500px;
+
+    margin: 0 auto;
+    border-radius: 15px;
+}
+
+.btn-info {
+    margin-left: 10px;
+}
+
+.file_button{
+    margin-left: 10px;
+}

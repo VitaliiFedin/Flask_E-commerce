@@ -3,27 +3,28 @@
 {% block title %} Register {% endblock %}
 
 {% block content %}
-{% for message in get_flashed_messages() %}
-<div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-    {{ message }} {% if link %} {{link |safe}} {% endif %}
-    </div>
-  {% endfor %}
+
 <div class="text-center h1 text-danger">Register</div>
 <div class="container">
-<form method=post>
-  <div class="form-class">
-      {{ form.csrf_token }}
-    {{ render_field(form.username, class='form-control') }}
-    {{render_field(form.name, class='form-control')}}
-    {{ render_field(form.email, class='form-control') }}
-    {{ render_field(form.password, class='form-control') }}
-    {{ render_field(form.confirm, class='form-control') }}
-      <br>
-    <input type="file" name="photo">
-      <br>
-    <input type="submit" class="btn btn-info" value="Register">
-  </div>
-</form>
+    <form method=post>
+      <div class="form-class">
+          {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }} {% if link %} {{link |safe}} {% endif %}
+        </div>
+        {% endfor %}
+          {{ form.csrf_token }}
+        {{ render_field(form.username, class='form-control') }}
+        {{render_field(form.name, class='form-control')}}
+        {{ render_field(form.email, class='form-control') }}
+        {{ render_field(form.password, class='form-control') }}
+        {{ render_field(form.confirm, class='form-control') }}
+          <br/>
+        <input type="file" name="photo" class="file_button">
+           <br/>
+        <input type="submit" class="btn btn-info" value="Register">
+      </div>
+    </form>
 </div>
 {% endblock %}
