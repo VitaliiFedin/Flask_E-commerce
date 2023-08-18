@@ -8,12 +8,7 @@
 <div class="container">
     <form method=post>
       <div class="form-class">
-          {% for message in get_flashed_messages() %}
-        <div class="alert alert-warning">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{ message }} {% if link %} {{link |safe}} {% endif %}
-        </div>
-        {% endfor %}
+      {% include '_messages.html' %}
           {{ form.csrf_token }}
         {{ render_field(form.username, class='form-control') }}
         {{render_field(form.name, class='form-control')}}

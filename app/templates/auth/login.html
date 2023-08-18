@@ -3,23 +3,20 @@
 {% block title %} Login {% endblock %}
 
 {% block content %}
-{% for message in get_flashed_messages() %}
-<div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-    {{ message }}
-    </div>
-  {% endfor %}
-<div class="text-center h1 text-danger">Register</div>
+
+<div class="text-center h1 text-danger">Login</div>
 <div class="container">
 <form method=post>
-  <div>
+  <div class="form-class">
+      {% include '_messages.html' %}
       {{ form.csrf_token }}
     {{ render_field(form.email, class='form-control') }}
     {{ render_field(form.password, class='form-control') }}
     {{ render_field(form.remember_me, class='form-control') }}
       <br>
+      <input type="submit" class="btn btn-info" value="Login">
   </div>
-    <input type="submit" class="btn btn-info" value="Login">
+
 </form>
 </div>
 {% endblock %}

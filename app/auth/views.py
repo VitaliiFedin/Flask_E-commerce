@@ -9,22 +9,22 @@ from flask_login import login_user, login_required, logout_user
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
-    link = '<a href="auth/login">Login</a>'
+    link = '<a href="http://127.0.0.1:5000/auth/login">Login</a>'
     form = RegisterForm()
     if form.validate():
         user = User.query.filter_by(email=form.email.data).first()
         username = User.query.filter_by(username=form.username.data).first()
         if user is not None:
-            flash('This email is already registered.')
+            flash('This email is already registered.', 'danger')
             return render_template('register.html', form=form, link=link)
         if username is not None:
-            flash('This username is already in use')
+            flash('This username is already in use', 'danger')
             return render_template('register.html', form=form)
         user = User(username=form.username.data, email=form.email.data.lower(), password=form.password.data,
                     name=form.name.data)
         db.session.add(user)
         db.session.commit()
-        flash('You have register.')
+        flash('You have register.', 'success')
     return render_template('register.html', form=form, link=link)
 
 
@@ -39,7 +39,7 @@ def login():
             if next is None or not next.startswith('/'):
                 next = url_for('main.hello')
             return redirect(next)
-        flash('Invalid email or password')
+        flash('Invalid email or password', 'danger')
     return render_template('auth/login.html', form=form)
 
 
