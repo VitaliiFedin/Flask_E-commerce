@@ -3,7 +3,7 @@ from flask import render_template
 from flask import session, request, flash, redirect, url_for
 from ..models import Brand, Category
 from .. import db
-
+from .forms import AddProductForm
 
 @main.route('/', methods=['GET'])
 def hello():
@@ -32,10 +32,16 @@ def addcat():
         getcat = request.form.get('category')
         if not getcat:
             flash('No category', 'danger')
-        cat = Brand(name=getcat)
+        cat = Category(name=getcat)
         db.session.add(cat)
         flash(f'Cat {getcat} was added successfully', 'success')
         db.session.commit()
         return redirect(url_for('.addcat'))
 
     return render_template('products/addbrand.html')
+
+
+@main.route('/addproduct', methods=['GET','POST'])
+def addproduct():
+    form = AddProductForm()
+    return render_template('products/addproduct.html',form=form)
