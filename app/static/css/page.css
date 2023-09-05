@@ -21,3 +21,25 @@
 .file_button{
     margin-left: 10px;
 }
+
+.product-container{
+    margin-left: 40rem;
+    max-width: 35rem;
+}
+
+.product-form{
+    padding: 10px;
+}
+
+.form-select{
+    max-width: 31rem;
+    margin-left: 10px;
+    margin-bottom: 10px;
+
+}
+
+.label-for-form{
+    margin-top: 10px;
+
+    margin-left: 10px;
+}

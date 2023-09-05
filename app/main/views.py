@@ -5,6 +5,7 @@ from ..models import Brand, Category
 from .. import db
 from .forms import AddProductForm
 
+
 @main.route('/', methods=['GET'])
 def hello():
     print(session.items())
@@ -41,7 +42,9 @@ def addcat():
     return render_template('products/addbrand.html')
 
 
-@main.route('/addproduct', methods=['GET','POST'])
+@main.route('/addproduct', methods=['GET', 'POST'])
 def addproduct():
+    brands = Brand.query.all()
+    categories = Category.query.all()
     form = AddProductForm()
-    return render_template('products/addproduct.html',form=form)
+    return render_template('products/addproduct.html', form=form, brands=brands, categories=categories)
