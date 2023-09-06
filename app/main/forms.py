@@ -1,9 +1,10 @@
 from flask_wtf.file import FileAllowed, FileField, FileRequired
-from wtforms import Form, IntegerField, StringField, BooleanField, TextAreaField, MultipleFileField
+from wtforms import Form, IntegerField, StringField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, NumberRange
+from flask_wtf import FlaskForm
 
 
-class AddProductForm(Form):
+class AddProductForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     price = IntegerField('Price', validators=[DataRequired(), NumberRange(min=1)])
     discount = IntegerField('Discount', default=0)

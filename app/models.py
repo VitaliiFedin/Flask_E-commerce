@@ -2,6 +2,7 @@ from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 from . import login_manager
+from datetime import datetime
 
 
 class User(UserMixin, db.Model):
@@ -35,10 +36,29 @@ class User(UserMixin, db.Model):
 class Brand(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False, unique=True)
+    products = db.relationship('Product', backref='item', lazy='dynamic')
 
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False, unique=True)
+    products = db.relationship('Product', backref='items', lazy='dynamic')
 
 
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    price = db.Column(db.Numeric(10, 2), nullable=False)
+    discount = db.Column(db.Integer, default=0)
+    stock = db.Column(db.Integer, nullable=False)
+    colors = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    pub_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    brand_id = db.Column(db.Integer, db.ForeignKey('brand.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    image_1 = db.Column(db.String(150), nullable=False, default='image.jpg')
+    image_2 = db.Column(db.String(150), nullable=False, default='image.jpg')
+    image_3 = db.Column(db.String(150), nullable=False, default='image.jpg')
+
+    def __repr__(self):
+        return f'Add product {self.name}'

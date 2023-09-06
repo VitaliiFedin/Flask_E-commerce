@@ -1,7 +1,7 @@
 .form-class{
-    margin-left: 40rem;
+    margin-left: 30rem;
     max-width: 35rem;
-    padding: 10px 10px;
+    padding: 5px 10px;
     border: 10px solid whitesmoke;
 }
 
@@ -11,7 +11,7 @@
     max-width: 500px;
 
     margin: 0 auto;
-    border-radius: 15px;
+    border-radius: 10px;
 }
 
 .btn-info {
@@ -23,7 +23,7 @@
 }
 
 .product-container{
-    margin-left: 40rem;
+    margin-left: 30rem;
     max-width: 35rem;
 }
 
@@ -43,3 +43,15 @@
 
     margin-left: 10px;
 }
+.navbar-my{
+    max-height: 28px;
+    padding-right: 0px;
+
+
+
+}
+.container-fluid-my{
+    max-height: 0px;
+    padding-top: 0px;
+}
+

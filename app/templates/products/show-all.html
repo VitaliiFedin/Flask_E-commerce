@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{super()}}
+    {% for item in product %}
+        {{item.name}} - {{item.item.name}}
+    {% endfor %}
+
+{% endblock  %}
