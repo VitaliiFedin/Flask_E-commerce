@@ -36,13 +36,13 @@ class User(UserMixin, db.Model):
 class Brand(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False, unique=True)
-    products = db.relationship('Product', backref='item', lazy='dynamic')
+    products = db.relationship('Product', backref='item', lazy='dynamic', cascade='all')
 
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False, unique=True)
-    products = db.relationship('Product', backref='items', lazy='dynamic')
+    products = db.relationship('Product', backref='items', lazy='dynamic',cascade='all')
 
 
 class Product(db.Model):

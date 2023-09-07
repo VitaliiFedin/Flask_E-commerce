@@ -16,16 +16,16 @@ def register():
         username = User.query.filter_by(username=form.username.data).first()
         if user is not None:
             flash('This email is already registered.', 'danger')
-            return render_template('register.html', form=form, link=link)
+            return render_template('auth/register.html', form=form, link=link)
         if username is not None:
             flash('This username is already in use', 'danger')
-            return render_template('register.html', form=form)
+            return render_template('auth/register.html', form=form)
         user = User(username=form.username.data, email=form.email.data.lower(), password=form.password.data,
                     name=form.name.data)
         db.session.add(user)
         db.session.commit()
         flash('You have register.', 'success')
-    return render_template('register.html', form=form, link=link)
+    return render_template('auth/register.html', form=form, link=link)
 
 
 @auth.route('/login', methods=['GET', 'POST'])
