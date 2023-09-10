@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                {% if  edit_brand %}
+                <h1 class="text-center mt-5">Update a brand</h1>
+                <form action="" method="POST">
+                    <input type="text" name="brand" class="form-control" value="{{ edit_brand.name }}">
+                    <input type="submit" value="Add brand" class="btn btn-info mt-2">
+                    <a href="{{ url_for('.get_brands') }}" class="btn btn-warning">Cancel</a>
+                </form>
+                {% else %}
+                <h1 class="text-center mt-5">Update a category</h1>
+                <form action="" method="POST">
+                {% include '_messages.html' %}
+                    <input type="text" name="category" class="form-control" value="{{ edit_category.name }}">
+                    <input type="submit" value="Add a category" class="btn btn-info mt-2">
+                <a href="{{ url_for('.get_categories') }}" class="btn btn-warning">Cancel</a>
+                </form>
+                {% endif %}
+
+            </div>
+            <div class="col-md-3"></div>
+
+        </div>
+    </div>
+
+
+{% endblock %}

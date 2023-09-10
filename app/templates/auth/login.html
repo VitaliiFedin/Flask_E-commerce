@@ -12,7 +12,7 @@
       {{ form.csrf_token }}
     {{ render_field(form.email, class='form-control') }}
     {{ render_field(form.password, class='form-control') }}
-    {{ render_field(form.remember_me, class='form-control') }}
+      <label>Remember me<input type="checkbox" id="remember_me" name="remember_me" value="y" aria-label="remember_me"></label>
       <br>
       <input type="submit" class="btn btn-info" value="Login">
   </div>

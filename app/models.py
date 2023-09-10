@@ -1,8 +1,9 @@
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin, AnonymousUserMixin
+from flask_login import UserMixin, AnonymousUserMixin, current_user
 from . import login_manager
 from datetime import datetime
+from flask import current_app, abort
 
 
 class User(UserMixin, db.Model):
