@@ -1,3 +1,5 @@
+import os
+
 from . import admin
 from flask_login import login_required, current_user
 from flask import current_app, abort, render_template, url_for, request, flash, redirect
@@ -133,3 +135,60 @@ def add_product():
             db.session.commit()
             return redirect(url_for('.add_product'))
     return render_template('products/addproduct.html', form=form, brands=brands, categories=categories)
+
+
+@admin.route('/edit-product/<int:id>', methods=['GET', 'POST'])
+@login_required
+@check_admin
+def edit_product(id):
+    brands = Brand.query.all()
+    get_brand = request.form.get('brand')
+    categories = Category.query.all()
+    get_category = request.form.get('category')
+    form = AddProductForm()
+    edit_product = Product.query.get_or_404(id)
+    if request.method == 'POST':
+        edit_product.name = form.name.data
+        edit_product.price = form.price.data
+        edit_product.discount = form.discount.data
+        edit_product.stock = form.stock.data
+        edit_product.colors = form.colors.data
+        edit_product.description = form.description.data
+        edit_product.brand_id = request.form.get('brand')
+        edit_product.category_id = request.form.get('category')
+        if request.files.get('image_1'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, 'static/images/' + edit_product.image_1))
+                edit_product.image_1 = photos.save(request.files.get('image_1'), name=secrets.token_hex(10) + '.')
+            except:
+                edit_product.image_1 = photos.save(request.files.get('image_1'), name=secrets.token_hex(10) + '.')
+
+        if request.files.get('image_2'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, 'static/images/' + edit_product.image_2))
+                edit_product.image_2 = photos.save(request.files.get('image_2'), name=secrets.token_hex(10) + '.')
+            except:
+                edit_product.image_2 = photos.save(request.files.get('image_2'), name=secrets.token_hex(10) + '.')
+
+        if request.files.get('image_3'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, 'static/images/' + edit_product.image_3))
+                edit_product.image_3 = photos.save(request.files.get('image_3'), name=secrets.token_hex(10) + '.')
+            except:
+                edit_product.image_3 = photos.save(request.files.get('image_3'), name=secrets.token_hex(10) + '.')
+
+        db.session.commit()
+        return redirect(url_for('.show_products'))
+    form.name.data = edit_product.name
+    form.price.data = edit_product.price
+    form.discount.data = edit_product.discount
+    form.stock.data = edit_product.stock
+    form.colors.data = edit_product.colors
+    form.description.data = edit_product.description
+    get_brand = edit_product.brand_id
+    get_category = edit_product.category_id
+    form.image_1.data = edit_product.image_1
+    form.image_2.data = edit_product.image_2
+    form.image_3.data = edit_product.image_3
+    return render_template('products/edit-product.html', form=form, edit_product=edit_product, brands=brands,
+                           categories=categories)

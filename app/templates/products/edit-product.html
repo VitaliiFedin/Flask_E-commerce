@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block content %}
+
+{% include '_messages.html' %}
+    <div class="container">
+        <div class="product-container">
+            <h2 class="text-center bg-info p-2">Edit a product</h2>
+            <form action="" method="post" enctype="multipart/form-data">
+                <div class="product-form">
+                {{ render_field(form.name, class='form-control') }}
+                {{render_field(form.price, class='form-control')}}
+                {{ render_field(form.discount, class='form-control') }}
+                {{ render_field(form.stock, class='form-control') }}
+
+                <label for="brand" class="label-for-form">Add a brand</label>
+                <select name="brand" id="brand" class="form-control form-select" required>
+
+                    <option value="{{ edit_product.brand_id }}">{{ edit_product.item.name}}</option>
+                        {% for brand in brands %}
+                            <option value="{{brand.id}}">{{brand.name}}</option>
+                        {% endfor %}
+
+                </select>
+
+                <label for="category" class="label-for-form">Add a category</label>
+                <select name="category" id="category" class="form-control form-select" required>
+
+                    <option value="{{ edit_product.category_id }}">{{ edit_product.items.name }}</option>
+                        {% for category in categories %}
+                            <option value="{{category.id}}">{{category.name}}</option>
+                        {% endfor %}
+
+                </select>
+
+                {{ render_field(form.colors, class='form-control') }}
+                {{ render_field(form.description, class='form-control') }}
+                    {{ render_field(form.image_1, class='form-control') }}
+                        {{ render_field(form.image_2, class='form-control') }}
+                       {{ render_field(form.image_3, class='form-control') }}
+
+
+                <button type="submit" class="btn btn-info mt-4">Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+
