@@ -176,7 +176,7 @@ def edit_product(id):
                 edit_product.image_3 = photos.save(request.files.get('image_3'), name=secrets.token_hex(10) + '.')
             except:
                 edit_product.image_3 = photos.save(request.files.get('image_3'), name=secrets.token_hex(10) + '.')
-
+        flash(f'Product {edit_product.name}  was updated successfully', 'success')
         db.session.commit()
         return redirect(url_for('.show_products'))
     form.name.data = edit_product.name
@@ -192,3 +192,43 @@ def edit_product(id):
     form.image_3.data = edit_product.image_3
     return render_template('products/edit-product.html', form=form, edit_product=edit_product, brands=brands,
                            categories=categories)
+
+
+@admin.route('/delete-brand/<int:id>', methods=['POST'])
+@login_required
+@check_admin
+def delete_brand(id):
+    brand = Brand.query.get_or_404(id)
+    db.session.delete(brand)
+    flash(f'Brand {brand.name} was deleted', 'success')
+    db.session.commit()
+    return redirect(url_for('.get_brands'))
+
+
+@admin.route('/delete-category/<int:id>', methods=['POST'])
+@login_required
+@check_admin
+def delete_category(id):
+    category = Category.query.get_or_404(id)
+    db.session.delete(category)
+    flash(f'Category {category.name} was deleted', 'success')
+    db.session.commit()
+    return redirect(url_for('.get_categories'))
+
+
+@admin.route('/delete-product/<int:id>', methods=['POST'])
+@login_required
+@check_admin
+def delete_product(id):
+    product = Product.query.get_or_404(id)
+    try:
+        os.unlink(os.path.join(current_app.root_path, 'static/images/' + product.image_1))
+        os.unlink(os.path.join(current_app.root_path, 'static/images/' + product.image_2))
+        os.unlink(os.path.join(current_app.root_path, 'static/images/' + product.image_3))
+    except Exception as e:
+        print(e)
+
+    db.session.delete(product)
+    flash(f'Category {product.name} was deleted', 'success')
+    db.session.commit()
+    return redirect(url_for('.show_products'))

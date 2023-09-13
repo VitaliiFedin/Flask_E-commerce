@@ -55,3 +55,9 @@
     padding-top: 0px;
 }
 
+.modal-content{
+    height: 130px;
+}
+.modal-body{
+    margin: 0 auto;
+}
