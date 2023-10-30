@@ -1,12 +1,13 @@
-from flask import session
-
+from flask import session, render_template
+from ..models import Product
 from . import main
 
 
 @main.route('/', methods=['GET'])
 def hello():
     print(session.items())
-    return 'Hello world'
+    products = Product.query.filter(Product.stock > 0)
+    return render_template('products/index.html', products=products)
 
 
 
