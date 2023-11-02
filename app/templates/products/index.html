@@ -88,8 +88,8 @@
                 <a href="{{ url_for('.get_brand', id=get_brand.id, page = brand.prev_num) }}" class="btn btn-outline-info btn-sm mt-3 ms-1"> Previous</a>
             {% endif %}
 
-
-                {% for page_num in brand.iter_pages() %}
+            {% if brand.total>2 %}
+                {% for page_num in brand.iter_pages(left_edge=1, right_edge=2, left_current=1, right_current=2) %}
                     {% if page_num %}
                     {% if brand.page == page_num %}
                         <a href="{{ url_for('.get_brand',id=get_brand.id, page = page_num) }}" class="btn btn-info btn-sm mt-3 ms-1"> {{ page_num }}</a>
@@ -101,6 +101,7 @@
                     {% endif %}
 
                 {% endfor %}
+                {% endif %}
              {% if brand.has_next %}
                 <a href="{{ url_for('.get_brand',id=get_brand.id, page = brand.next_num) }}" class="btn btn-outline-info btn-sm mt-3 ms-1"> Next</a>
                 {% endif %}
@@ -169,8 +170,8 @@
                 <a href="{{ url_for('.get_category', id=get_cat.id, page = category.prev_num) }}" class="btn btn-outline-info btn-sm mt-3 ms-1"> Previous</a>
             {% endif %}
 
-
-                {% for page_num in category.iter_pages() %}
+                {% if category.total>3 %}
+                {% for page_num in category.iter_pages(left_edge=1, right_edge=2, left_current=1, right_current=2) %}
                     {% if page_num %}
                     {% if category.page == page_num %}
                         <a href="{{ url_for('.get_category',id=get_cat.id, page = page_num) }}" class="btn btn-info btn-sm mt-3 ms-1"> {{ page_num }}</a>
@@ -182,6 +183,7 @@
                     {% endif %}
 
                 {% endfor %}
+                    {% endif %}
              {% if category.has_next %}
                 <a href="{{ url_for('.get_category',id=get_cat.id, page = category.next_num) }}" class="btn btn-outline-info btn-sm mt-3 ms-1"> Next</a>
                 {% endif %}
@@ -230,8 +232,8 @@
             {% if products.has_prev %}
                 <a href="{{ url_for('.home_page', page = products.prev_num) }}" class="btn btn-outline-info btn-sm mt-3 ms-1"> Previous</a>
                 {% endif %}
-
-                {% for page_num in products.iter_pages() %}
+                {% if products.total>4 %}
+                {% for page_num in products.iter_pages(left_edge=1, right_edge=2, left_current=1, right_current=2) %}
                     {% if page_num %}
                     {% if products.page == page_num %}
                 <a href="{{ url_for('.home_page', page = page_num) }}" class="btn btn-info btn-sm mt-3 ms-1"> {{ page_num }}</a>
@@ -243,6 +245,7 @@
                     {% endif %}
 
             {% endfor %}
+                    {% endif %}
              {% if products.has_next %}
                 <a href="{{ url_for('.home_page', page = products.next_num) }}" class="btn btn-outline-info btn-sm mt-3 ms-1"> Next</a>
                 {% endif %}

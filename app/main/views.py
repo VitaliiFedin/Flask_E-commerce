@@ -7,7 +7,7 @@ from . import main
 def home_page():
     print(session.items())
     page = request.args.get('page', 1, type=int)
-    products = Product.query.filter(Product.stock > 0).paginate(page=page, per_page=2)
+    products = Product.query.filter(Product.stock > 0).order_by(Product.id.desc()).paginate(page=page, per_page=4)
     brands = Brand.query.join(Product, (Brand.id == Product.brand_id)).all()
     categories = Category.query.join(Product, (Category.id == Product.category_id)).all()
     return render_template('products/index.html', products=products, brands=brands, categories=categories)
@@ -17,7 +17,7 @@ def home_page():
 def get_brand(id):
     page = request.args.get('page', 1, type=int)
     get_brand = Brand.query.filter_by(id=id).first_or_404()
-    brand = Product.query.filter_by(brand_id=get_brand.id).paginate(page=page, per_page=2)
+    brand = Product.query.filter_by(brand_id=get_brand.id).paginate(page=page, per_page=4)
     brands = Brand.query.join(Product, (Brand.id == Product.brand_id)).all()
     categories = Category.query.join(Product, (Category.id == Product.category_id)).all()
     return render_template('products/index.html', brand=brand, brands=brands, categories=categories,
@@ -28,7 +28,7 @@ def get_brand(id):
 def get_category(id):
     page = request.args.get('page', 1, type=int)
     get_cat = Category.query.filter_by(id=id).first_or_404()
-    category = Product.query.filter_by(category_id=get_cat.id).paginate(page=page, per_page=2)
+    category = Product.query.filter_by(category_id=get_cat.id).paginate(page=page, per_page=4)
     categories = Category.query.join(Product, (Category.id == Product.category_id)).all()
     brands = Brand.query.join(Product, (Brand.id == Product.brand_id)).all()
     return render_template('products/index.html', category=category, categories=categories, brands=brands,
