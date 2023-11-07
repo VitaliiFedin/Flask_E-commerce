@@ -1,53 +1,7 @@
 {% extends 'base.html' %}
-
 {% block navbar %}
-
-    <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">Home</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="/">All products</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Brands
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              {% for brand in brands %}
-            <li><a class="dropdown-item" href="{{ url_for('.get_brand', id=brand.id) }}">{{ brand.name }}</a></li>
-              {% endfor %}
-
-          </ul>
-        </li>
-      <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Categories
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              {% for category in categories %}
-            <li><a class="dropdown-item" href="{{ url_for('.get_category', id=category.id) }}">{{ category.name }}</a></li>
-              {% endfor %}
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-    </div>
-  </div>
-</nav>
-    </div>
-{% endblock navbar  %}
+    {% include '_navbar.html' %}
+{% endblock navbar %}
 
 {% block content %}
 
@@ -68,18 +22,13 @@
                         <p class="text-center">{{ item.price }}$</p>
                     </div>
                     <div class="card-footer">
-                        <a href="#" class="float-start btn btn-sm btn-primary">details</a>
+                        <a href="{{ url_for('.single_page',id=item.id) }}" class="float-start btn btn-sm btn-primary">details</a>
                         <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
                     </div>
                 </div>
             </div>
             {% endfor %}
             </div>
-
-
-
-
-
 
 
             <div class="row">
@@ -106,32 +55,6 @@
                 <a href="{{ url_for('.get_brand',id=get_brand.id, page = brand.next_num) }}" class="btn btn-outline-info btn-sm mt-3 ms-1"> Next</a>
                 {% endif %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div class="row">
         {% elif category %}
             {% for item in category %}
@@ -147,22 +70,13 @@
                         <p class="text-center">{{ item.price }}$</p>
                     </div>
                     <div class="card-footer">
-                        <a href="#" class="float-start btn btn-sm btn-primary">details</a>
+                        <a href="{{url_for('.single_page', id=item.id)}}" class="float-start btn btn-sm btn-primary">details</a>
                         <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
                     </div>
                 </div>
             </div>
             {% endfor %}
             </div>
-
-
-
-
-
-
-
-
-
 
             <div class="row">
             <div class="col text-center">
@@ -188,23 +102,6 @@
                 <a href="{{ url_for('.get_category',id=get_cat.id, page = category.next_num) }}" class="btn btn-outline-info btn-sm mt-3 ms-1"> Next</a>
                 {% endif %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div class="row">
         {% else %}
             {% for product in products.items %}
@@ -220,7 +117,7 @@
                         <p class="text-center">{{ product.price }}$</p>
                     </div>
                     <div class="card-footer">
-                        <a href="#" class="float-start btn btn-sm btn-primary">details</a>
+                        <a href="{{url_for('.single_page', id=product.id)}}" class="float-start btn btn-sm btn-primary">details</a>
                         <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
                     </div>
                 </div>

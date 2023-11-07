@@ -12,6 +12,12 @@ def home_page():
     categories = Category.query.join(Product, (Category.id == Product.category_id)).all()
     return render_template('products/index.html', products=products, brands=brands, categories=categories)
 
+@main.route('/product/<int:id>')
+def single_page(id):
+    product = Product.query.get_or_404(id)
+    brands = Brand.query.join(Product, (Brand.id == Product.brand_id)).all()
+    categories = Category.query.join(Product, (Category.id == Product.category_id)).all()
+    return render_template('products/single_page.html', product=product, brands=brands, categories=categories)
 
 @main.route('/brand/<int:id>')
 def get_brand(id):
