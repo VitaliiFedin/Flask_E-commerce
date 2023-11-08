@@ -29,4 +29,7 @@ def create_app(config_name):
 
     from .admin import admin as admin_blueprint
     app.register_blueprint(admin_blueprint, url_prefix='/admin')
+
+    from .cart import cart as cart_blueprint
+    app.register_blueprint(cart_blueprint, url_prefix='/cart')
     return app
