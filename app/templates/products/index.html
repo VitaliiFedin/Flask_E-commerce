@@ -27,7 +27,7 @@
 
 
                         {% if item.id|string() in session['Shoppingcart'] %}
-                    <a href="#" class="btn btn-info">Cart</a>
+                    <a href="{{url_for('cart.get_items')}}" class="btn btn-info">Cart</a>
                    {% else %}
                 <form action="{{ url_for('cart.add_cart') }}" method="post">
                     <input type="hidden" name="product_id" value={{ item.id }}>
@@ -99,7 +99,7 @@
 
 
                         {% if item.id|string() in session['Shoppingcart'] %}
-                    <a href="#" class="btn btn-info">Cart</a>
+                    <a href="{{url_for('cart.get_items')}}" class="btn btn-info">Cart</a>
                    {% else %}
                 <form action="{{ url_for('cart.add_cart') }}" method="post">
                     <input type="hidden" name="product_id" value={{ item.id }}>
@@ -173,7 +173,7 @@
 
 
                         {% if product.id|string() in session['Shoppingcart'] %}
-                    <a href="#" class="btn btn-info">Cart</a>
+                    <a href="{{url_for('cart.get_items')}}" class="btn btn-info">Cart</a>
                    {% else %}
                 <form action="{{ url_for('cart.add_cart') }}" method="post">
                     <input type="hidden" name="product_id" value={{ product.id }}>

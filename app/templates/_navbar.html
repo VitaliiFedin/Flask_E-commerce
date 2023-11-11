@@ -32,7 +32,7 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" >Cart ({{ session['Shoppingcart'] | length }})</a>
+          <a class="nav-link" href="{{url_for('cart.get_items')}}" tabindex="-1" >Cart ({{ session['Shoppingcart'] | length }})</a>
         </li>
       </ul>
       <form class="d-flex">
