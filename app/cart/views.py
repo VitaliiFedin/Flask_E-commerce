@@ -20,7 +20,8 @@ def add_cart():
         product = Product.query.filter_by(id=product_id).first()
         if product_id and quantity and colors and request.referrer and request.method == 'POST':
             dict_items = {product_id: {'name': product.name, 'price': product.price, 'discount': product.discount,
-                                       'color': colors, 'quantity': quantity, 'image': product.image_1}}
+                                       'color': colors, 'quantity': quantity, 'image': product.image_1,
+                                       'colors': product.colors, 'stock': product.stock}}
             if 'Shoppingcart' in session:
                 print(session['Shoppingcart'])
                 if product_id in session['Shoppingcart']:
@@ -46,6 +47,26 @@ def get_items():
     for key, product in session['Shoppingcart'].items():
         discount = (product['discount'] / 100) * float(product['price'])
         grand_subtotal += float(product['price']) * int(product['quantity'])
-        grand_subtotal -= (discount*int(product['quantity']))
+        grand_subtotal -= (discount * int(product['quantity']))
 
     return render_template('cart/show_items.html', grand_subtotal=grand_subtotal)
+
+
+@cart.route('/update_cart/<int:code>', methods=['POST'])
+def update_cart(code):
+    if 'Shoppingcart' not in session and len(session['Shoppingcart']) <= 0:
+        return redirect(url_for('main.home'))
+    if request.method == 'POST':
+        quantity = request.form.get('quantity')
+        color = request.form.get('color')
+        try:
+            session.modified = True
+            for key, item in session['Shoppingcart'].items():
+                if int(key) == code:
+                    item['quantity'] = quantity
+                    item['color'] = color
+                    flash(f"Item {item['name']} is updated", "success")
+                    return redirect(url_for('.get_items'))
+        except Exception as e:
+            print(e)
+            return redirect(url_for('.get_items'))
