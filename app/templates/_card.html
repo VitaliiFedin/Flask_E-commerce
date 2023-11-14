@@ -1,0 +1,48 @@
+{% macro render_items(data, route, id_param) %}
+    {% from '_pagination.html' import generate_pagination_links %}
+    <div class="row">
+        {% for item in data %}
+            <div class="col-md-3 mt-3">
+                <div class="card">
+                    <img src="{{ url_for('static',filename ='images/' + item.image_1  ) }}" alt="{{ item.name }}" class="card-img-top"
+                    height="300">
+                    <div class="card-body">
+                        {% if item.discount >0 %}
+                        <h2 style="text-shadow: 1px 1px 2px #000; color: #F00; transform: rotate(-15deg); position: absolute; top: 20%; left: 20%;">Discount {{ item.discount }}%</h2>
+                        {% endif %}
+                        <h5 class="text-center">{{ item.name }}</h5>
+                        <p class="text-center">{{ item.price }}$</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ url_for('.single_page', id=item.id) }}" class="float-start btn btn-sm btn-primary">details</a>
+
+                        {% if item.id|string() in session['Shoppingcart'] %}
+                    <a href="{{url_for('cart.get_items')}}" class="btn btn-info">Cart</a>
+                   {% else %}
+
+                        <form action="{{ url_for('cart.add_cart') }}" method="post">
+                            <input type="hidden" name="product_id" value="{{ item.id }}">
+                            <button type="submit" class="btn btn-warning btn-sm">Add to Cart</button>
+                            <input type="hidden" name="quantity" id="" value="1" min="1">
+                            {% set colors = item.colors.split(',') %}
+                            <label for="colors" class="hidden">Colors</label>
+                            <select name="colors" class="hidden">
+                                {% for color in colors %}
+                                    {% set col = color.split(':') %}
+                                    <option value="{{ col[0] }}">{{ col[0].strip().capitalize() }}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+<div class="row">
+        <div class="col text-center">
+            {{ generate_pagination_links(data, route, id_param) }}
+        </div>
+    </div>
+{% endmacro %}
+

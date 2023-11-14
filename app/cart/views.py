@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash, session, current_app
 from . import cart
-from ..models import Product
+from ..models import Product, Brand, Category
 
 
 def merge_dicts(dict1, dict2):
@@ -40,6 +40,8 @@ def add_cart():
 
 @cart.route('/items')
 def get_items():
+    brands = Brand.query.join(Product, (Brand.id == Product.brand_id)).all()
+    categories = Category.query.join(Product, (Category.id == Product.category_id)).all()
     if 'Shoppingcart' not in session:
         return redirect(request.referrer)
     grand_subtotal = 0
@@ -49,7 +51,7 @@ def get_items():
         grand_subtotal += float(product['price']) * int(product['quantity'])
         grand_subtotal -= (discount * int(product['quantity']))
 
-    return render_template('cart/show_items.html', grand_subtotal=grand_subtotal)
+    return render_template('cart/show_items.html', grand_subtotal=grand_subtotal, brands=brands, categories=categories)
 
 
 @cart.route('/update_cart/<int:code>', methods=['POST'])
