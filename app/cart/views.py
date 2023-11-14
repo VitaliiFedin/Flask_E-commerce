@@ -42,8 +42,8 @@ def add_cart():
 def get_items():
     brands = Brand.query.join(Product, (Brand.id == Product.brand_id)).all()
     categories = Category.query.join(Product, (Category.id == Product.category_id)).all()
-    if 'Shoppingcart' not in session:
-        return redirect(request.referrer)
+    if 'Shoppingcart' not in session or len(session['Shoppingcart']) <= 0:
+        return redirect(url_for('main.home_page'))
     grand_subtotal = 0
     discount = 0
     for key, product in session['Shoppingcart'].items():
@@ -72,3 +72,18 @@ def update_cart(code):
         except Exception as e:
             print(e)
             return redirect(url_for('.get_items'))
+
+
+@cart.route('/delete/<int:id>')
+def delete_item(id):
+    if 'Shoppingcart' not in session and len(session['Shoppingcart']) <= 0:
+        return redirect(url_for('main.home'))
+    try:
+        session.modified = True
+        for key, item in session['Shoppingcart'].items():
+            if int(key) == id:
+                session['Shoppingcart'].pop(key, None)
+                return redirect(url_for('.get_item'))
+    except Exception as e:
+        print(e)
+        return redirect(url_for('.get_items'))
