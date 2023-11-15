@@ -87,3 +87,12 @@ def delete_item(id):
     except Exception as e:
         print(e)
         return redirect(url_for('.get_items'))
+
+
+@cart.route('/clear')
+def clear_cart():
+    try:
+        session.pop('Shoppingcart', None)
+        return redirect(url_for('main.home_page'))
+    except Exception as e:
+        print(e)

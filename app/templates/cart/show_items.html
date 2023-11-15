@@ -62,6 +62,7 @@
                 <tr>
                     <td><a href="{{url_for('main.home_page')}}"> Continue shopping</a></td>
                     <td colspan="7"><h3>Grand total: $ {{ grand_subtotal }}</h3></td>
+                    <td> <a href="{{ url_for('.clear_cart') }}" class="btn btn-danger">Clear</a> </td>
                 </tr>
 
 </table>

@@ -12,14 +12,32 @@
         <div class="row">
         {% if brand %}
             {{ render_items(brand, '.get_brand', get_brand.id) }}
+            <div class="row">
+        <div class="col text-center">
+            {{ generate_pagination_links(brand, '.get_brand', get_brand.id) }}
+        </div>
+    </div>
+
 
             <div class="row">
         {% elif category %}
             {{ render_items(category, '.get_category', get_cat.id) }}
 
             <div class="row">
+        <div class="col text-center">
+            {{ generate_pagination_links(category, '.get_category', get_cat.id) }}
+        </div>
+    </div>
+
+            <div class="row">
         {% else %}
             {{ render_items(products, '.home_page') }}
+
+            <div class="row">
+        <div class="col text-center">
+            {{ generate_pagination_links(products, '.home_page') }}
+        </div>
+    </div>
 
             {% endif %}
         </div>

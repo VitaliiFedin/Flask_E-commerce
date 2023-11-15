@@ -43,10 +43,11 @@ class Brand(db.Model):
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False, unique=True)
-    products = db.relationship('Product', backref='items', lazy='dynamic',cascade='all')
+    products = db.relationship('Product', backref='items', lazy='dynamic', cascade='all')
 
 
 class Product(db.Model):
+    __searchable__ = ['name', 'description']
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     price = db.Column(db.Numeric(10, 2), nullable=False)

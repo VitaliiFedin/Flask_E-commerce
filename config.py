@@ -7,7 +7,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:fed123321@localhost/e-commerce'
     SECRET_KEY = 'My_key'
     UPLOADED_PHOTOS_DEST = os.path.join(basedir, 'app/static/images')
-    ADMIN_EMAIL= 'vetal270399@gmail.com'
+    ADMIN_EMAIL = 'vetal270399@gmail.com'
 
     @staticmethod
     def init_app(app):

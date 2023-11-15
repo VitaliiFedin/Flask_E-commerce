@@ -1,6 +1,7 @@
 from flask import session, render_template, request
 from ..models import Product, Brand, Category
 from . import main
+from .. import search
 
 
 @main.route('/', methods=['GET'])
@@ -11,6 +12,15 @@ def home_page():
     brands = Brand.query.join(Product, (Brand.id == Product.brand_id)).all()
     categories = Category.query.join(Product, (Category.id == Product.category_id)).all()
     return render_template('products/index.html', products=products, brands=brands, categories=categories)
+
+
+@main.route('/result')
+def get_result():
+    search_word = request.args.get('q')
+    products = Product.query.msearch(search_word, fields=['name', 'description'], limit=3)
+    brands = Brand.query.join(Product, (Brand.id == Product.brand_id)).all()
+    categories = Category.query.join(Product, (Category.id == Product.category_id)).all()
+    return render_template('products/result.html', products=products,brands=brands, categories=categories)
 
 
 @main.route('/product/<int:id>')
@@ -41,15 +51,3 @@ def get_category(id):
     brands = Brand.query.join(Product, (Brand.id == Product.brand_id)).all()
     return render_template('products/index.html', category=category, categories=categories, brands=brands,
                            get_cat=get_cat)
-
-
-"""
-@main.route('/check1')
-def check1():
-    if current_user.email == current_app.config['ADMIN_EMAIL']:
-        print('Wow')
-        return redirect(url_for('.add_brand'))
-
-    else:
-        print('Bruh')
-"""

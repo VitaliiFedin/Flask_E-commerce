@@ -22,7 +22,7 @@
 
                         <form action="{{ url_for('cart.add_cart') }}" method="post">
                             <input type="hidden" name="product_id" value="{{ item.id }}">
-                            <button type="submit" class="btn btn-warning btn-sm">Add to Cart</button>
+                            <button type="submit" class="btn btn-warning btn-sm add_to_card">Add to Cart</button>
                             <input type="hidden" name="quantity" id="" value="1" min="1">
                             {% set colors = item.colors.split(',') %}
                             <label for="colors" class="hidden">Colors</label>
@@ -39,10 +39,7 @@
             </div>
         {% endfor %}
     </div>
-<div class="row">
-        <div class="col text-center">
-            {{ generate_pagination_links(data, route, id_param) }}
-        </div>
-    </div>
+
+
 {% endmacro %}
 
