@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin, current_user
 from . import login_manager
 from datetime import datetime
-from flask import current_app, abort
+import json
 
 
 class User(UserMixin, db.Model):
@@ -64,3 +64,31 @@ class Product(db.Model):
 
     def __repr__(self):
         return f'Add product {self.name}'
+
+
+class JsonEncoderDict(db.TypeDecorator):
+    impl = db.Text
+
+    def set_value(self, value, dialect):
+        if value is None:
+            return {}
+        else:
+            return json.dumps(value)
+
+    def get_value(self, value, dialect):
+        if value is None:
+            return {}
+        else:
+            return json.loads(value)
+
+
+class CustomerOrder(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    invoice = db.Column(db.String(20), unique=True, nullable=False)
+    status = db.Column(db.String(20), default='Pending', nullable=False)
+    customer_id = db.Column(db.Integer, unique=False, nullable=False)
+    data_created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    orders = db.Column(JsonEncoderDict)
+
+    def __repr__(self):
+        return f'CustomerOrder {self.invoice}'
