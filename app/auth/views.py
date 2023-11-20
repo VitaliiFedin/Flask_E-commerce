@@ -37,7 +37,7 @@ def login():
             login_user(user, request.form.get('remember_me'))
             next = request.args.get('next')
             if next is None or not next.startswith('/'):
-                next = url_for('main.hello')
+                next = url_for('main.home_page')
             return redirect(next)
         flash('Invalid email or password', 'danger')
     return render_template('auth/login.html', form=form)

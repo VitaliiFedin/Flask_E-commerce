@@ -34,6 +34,15 @@
         <li class="nav-item">
           <a class="nav-link" href="{{url_for('cart.get_items')}}" tabindex="-1" >Cart ({{ session['Shoppingcart'] | length }})</a>
         </li>
+        {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('auth.logout')}}">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('auth.login')}}">Logout</a>
+        </li>
+        {% endif %}
       </ul>
       <form class="d-flex" action="{{ url_for('main.get_result') }}">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">

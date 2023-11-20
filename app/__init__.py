@@ -4,7 +4,6 @@ from flask_login import LoginManager
 from flask_msearch import Search
 from flask_sqlalchemy import SQLAlchemy
 from flask_uploads import IMAGES, UploadSet, configure_uploads
-
 from config import config
 
 photos = UploadSet('photos', IMAGES)

@@ -11,7 +11,7 @@
                         <h2 style="text-shadow: 1px 1px 2px #000; color: #F00; transform: rotate(-15deg); position: absolute; top: 20%; left: 20%;">Discount {{ item.discount }}%</h2>
                         {% endif %}
                         <h5 class="text-center">{{ item.name }}</h5>
-                        <p class="text-center">{{ item.price }}$</p>
+                        <p class="text-center">${{ item.price }}</p>
                     </div>
                     <div class="card-footer">
                         <a href="{{ url_for('.single_page', id=item.id) }}" class="float-start btn btn-sm btn-primary">details</a>
