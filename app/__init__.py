@@ -5,7 +5,7 @@ from flask_msearch import Search
 from flask_sqlalchemy import SQLAlchemy
 from flask_uploads import IMAGES, UploadSet, configure_uploads
 from config import config
-
+from werkzeug.utils import secure_filename
 
 photos = UploadSet('photos', IMAGES)
 db = SQLAlchemy()
@@ -13,7 +13,6 @@ bootstrap = Bootstrap()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 search = Search()
-
 
 
 def create_app(config_name):
