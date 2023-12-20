@@ -1,6 +1,10 @@
+import secrets
+
 from flask import render_template, request, redirect, url_for, flash, session, current_app
 from . import cart
-from ..models import Product, Brand, Category
+from ..models import Product, Brand, Category, CustomerOrder
+from flask_login import login_required, current_user
+from .. import db
 
 
 def merge_dicts(dict1, dict2):
@@ -96,3 +100,20 @@ def clear_cart():
         return redirect(url_for('main.home_page'))
     except Exception as e:
         print(e)
+
+
+@cart.route('/get_order')
+@login_required
+def get_order():
+    if current_user.is_authenticated:
+        customer_id = current_user.id
+        invoice = secrets.token_hex(5)
+        try:
+            order = CustomerOrder(invoice=invoice, customer_id=customer_id, orders=session['Shoppingcart'])
+            db.session.add(order)
+            flash('Your order has been sent successfully', 'success')
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            flash('Something went wrong', 'danger')
+            return redirect(url_for('.get_items'))
