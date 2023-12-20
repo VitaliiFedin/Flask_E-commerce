@@ -34,7 +34,7 @@ def login():
     if request.method == 'POST' and form.validate():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.verify_password(form.password.data):
-            login_user(user, form.remember_me.data)
+            login_user(user, request.form.get('remember_me'))
             next = request.args.get('next')
             if next is None or not next.startswith('/'):
                 next = url_for('main.home_page')
