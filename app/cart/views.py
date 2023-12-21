@@ -2,7 +2,7 @@ import secrets
 
 from flask import render_template, request, redirect, url_for, flash, session, current_app
 from . import cart
-from ..models import Product, Brand, Category, CustomerOrder
+from ..models import Product, Brand, Category, CustomerOrder, User
 from flask_login import login_required, current_user
 from .. import db
 
@@ -111,9 +111,43 @@ def get_order():
         try:
             order = CustomerOrder(invoice=invoice, customer_id=customer_id, orders=session['Shoppingcart'])
             db.session.add(order)
-            flash('Your order has been sent successfully', 'success')
             db.session.commit()
+            session.pop('Shoppingcart')
+            flash('Your order has been sent successfully', 'success')
+            return redirect(url_for('.get_invoice', invoice=invoice))
+
         except Exception as e:
             print(e)
             flash('Something went wrong', 'danger')
             return redirect(url_for('.get_items'))
+
+
+@cart.route('/order/<invoice>')
+def get_invoice(invoice):
+    if current_user.is_authenticated:
+        grand_total = 0
+        subtotal = 0
+        grand_subtotal = 0
+        customer_id = current_user.id
+        customer = User.query.filter_by(id=customer_id).first()
+        orders = CustomerOrder.query.filter_by(customer_id=customer_id).order_by(CustomerOrder.id.desc()).first()
+        for key, product in orders.orders.items():
+            discount = (product['discount'] / 100) * float(product['price'])
+            grand_subtotal += float(product['price']) * int(product['quantity'])
+            grand_subtotal -= (discount * int(product['quantity']))
+    else:
+        return redirect(url_for('.auth.login'))
+    return render_template('order/order.html', invoice=invoice, customer=customer, orders=orders,
+                           subtotal=subtotal, grand_total=grand_total, grand_subtotal=grand_subtotal)
+
+
+@cart.route('/decline/<invoice>', methods=['POST'])
+def delete_invoice(invoice):
+    order = CustomerOrder.query.filter_by(invoice=invoice).first()
+    if not order:
+        flash("Sorry, there's no such order", 'danger')
+        return redirect(url_for('.get_invoice', invoice=invoice))
+    db.session.delete(order)
+    db.session.commit()
+    flash(f'The order {order.invoice} was successfully declined', 'success')
+    return redirect(url_for('main.home_page'))

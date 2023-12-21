@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% from "_formhelpers.html" import render_field %}
 {% block title %} Login {% endblock %}
-
+{% block navbar %}
+    {% include '_navbar.html' %}
+{% endblock navbar %}
 {% block content %}
 
 <div class="text-center h1 text-danger">Login</div>
