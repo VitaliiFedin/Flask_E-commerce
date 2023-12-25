@@ -36,4 +36,7 @@ def create_app(config_name):
 
     from .cart import cart as cart_blueprint
     app.register_blueprint(cart_blueprint, url_prefix='/cart')
+
+    from .order import order as order_blueprint
+    app.register_blueprint(order_blueprint, url_prefix='/order')
     return app

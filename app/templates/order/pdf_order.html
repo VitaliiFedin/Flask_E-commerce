@@ -1,10 +1,12 @@
-{% extends 'base.html' %}
-{% block navbar %}
-    {% include '_navbar.html' %}
-{% endblock navbar %}
-{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/page.css')}}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+</head>
+<body>
 <div class="container mt-4">
-{% include '_messages.html' %}
     <div class="row">
     <div class="col-md-12">
         Invoice: {{orders.invoice}}
@@ -26,7 +28,7 @@
                 <th>Subtotal</th>
             </thead>
             <tbody>
-                <tr>
+                <tr style="text-align: center">
                 {% for key,product in orders.orders.items()  %}
                     {% set subtotal = product.price|float * product.quantity|int %}
                     {% set discount = "%0.2f" |format((product.discount/100)*product.price|float) %}
@@ -52,37 +54,11 @@
         </table>
     <table class="table table-sm">
                 <tr>
-                    <td>
-                        <form action="/pay" method="POST">
-                          <script
-                            src="https://checkout.stripe.com/checkout.js"
-                            class="stripe-button"
-                            data-key="pk_test_51OQ76iCml4QlIMYOs05ur4oBRZrE2zxEbHHpqQqkuI7kbpdoAH0y4v7k0Bm3uOoSZXS9dZfNBhydl2FaFTwxYXQc00kfB7nlEU"
-                            data-name="T-shirt"
-                            data-description="Comfortable cotton t-shirt"
-                            data-amount="{{ amount_for_stripe }}"
-                            data-currency="usd">
-                          </script>
-                        </form>
-                    <td>{{amount}} </td>
-                    </td>
                     <td colspan="7"><h3>Grand total: $ {{ grand_subtotal }}</h3></td>
-                    <td>
-                    <form action="{{ url_for('.delete_invoice',invoice = orders.invoice)}}" method="POST">
-                        <button type="submit" class="btn btn-danger">Decline</button>
-                    </form>
-                    </td>
-
-                    <td>
-                        <form action="{{url_for('.get_pdf', invoice = orders.invoice)}}" method="POST">
-                            <button type="submit" class="btn btn-info">Get PDF</button>
-                        </form>
-                    </td>
                 </tr>
 
 </table>
-
             </div>
         </div>
     </div>
- {% endblock content %}
+</body>
