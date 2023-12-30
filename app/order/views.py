@@ -1,12 +1,38 @@
 import secrets
 
-from flask import render_template, redirect, url_for, flash, session, request, make_response
-from flask_login import login_required, current_user
+import pdfkit
+import stripe
+from flask import (
+    flash,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
+from flask_login import current_user, login_required
 
-from . import order
 from .. import db
 from ..models import CustomerOrder, User
-import pdfkit
+from . import order
+
+
+def delete_unnecessary():
+    for key,product in session['Shoppingcart']:
+        session.modified = True
+        del product['image']
+        del product['colors']
+    return delete_unnecessary
+
+
+@order.route('/payment', methods=['POST'])
+def payment():
+    return redirect(url_for('thanks'))
+
+@order.route('/thanks')
+def thanks():
+    pass
 
 
 @order.route('/get_order')
@@ -15,6 +41,7 @@ def get_order():
     if current_user.is_authenticated:
         customer_id = current_user.id
         invoice = secrets.token_hex(5)
+        delete_unnecessary()
         try:
             order = CustomerOrder(invoice=invoice, customer_id=customer_id, orders=session['Shoppingcart'])
             db.session.add(order)
@@ -48,7 +75,7 @@ def get_invoice(invoice):
     amount_for_stripe = int(float(grand_subtotal) * 100)
 
     return render_template('order/order.html', invoice=invoice, customer=current_user, orders=order,
-                           grand_total=0, subtotal=0, grand_subtotal=grand_subtotal,amount_for_stripe=amount_for_stripe)
+                            grand_total=0, subtotal=0, grand_subtotal=grand_subtotal,amount_for_stripe=amount_for_stripe)
 
 
 @order.route('/decline/<invoice>', methods=['POST'])
@@ -83,9 +110,11 @@ def get_pdf(invoice):
     path_to_wkhtmptopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
     config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmptopdf)
     rendered = render_template('order/pdf_order.html', invoice=invoice, customer=current_user, orders=order,
-                               subtotal=0, grand_total=0, grand_subtotal=grand_subtotal)
+                                subtotal=0, grand_total=0, grand_subtotal=grand_subtotal)
     pdf = pdfkit.from_string(rendered, False, configuration=config, options={"enable-local-file-access": ""})
     response = make_response(pdf)
     response.headers['content-Type'] = 'application/pdf'
     response.headers['content-Disposition'] = f'inline; filename="{invoice}.pdf"'
     return response
+
+

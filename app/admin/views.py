@@ -1,14 +1,14 @@
 import os
-
-from . import admin
-from flask_login import login_required, current_user
-from flask import current_app, abort, render_template, url_for, request, flash, redirect
 import secrets
-from ..models import Brand, Category, Product
-from ..decorators import check_admin
+
+from flask import abort, current_app, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required
+
 from .. import db, photos
-from .forms import AddProductForm
 from ..decorators import check_admin
+from ..models import Brand, Category, Product
+from . import admin
+from .forms import AddProductForm
 
 
 @admin.route('/products')
