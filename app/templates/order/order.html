@@ -53,31 +53,37 @@
     <table class="table table-sm">
                 <tr>
                     <td>
-                        <form action="/pay" method="POST">
+                        {% if orders.status=='Paid' %}
+                        {% else %}
+                        <form action="{{url_for('order.payment')}}" method="POST">
+                            <input type='hidden' name='invoice' value='{{orders.invoice}}'>
+                            {% for key,product in orders.orders.items() %}
                           <script
                             src="https://checkout.stripe.com/checkout.js"
                             class="stripe-button"
                             data-key="pk_test_51OQ76iCml4QlIMYOs05ur4oBRZrE2zxEbHHpqQqkuI7kbpdoAH0y4v7k0Bm3uOoSZXS9dZfNBhydl2FaFTwxYXQc00kfB7nlEU"
                             data-name="T-shirt"
-                            data-description="Comfortable cotton t-shirt"
+                            data-description={{product.name}}
                             data-amount="{{ amount_for_stripe }}"
                             data-currency="usd">
                           </script>
+                          {% endfor %}
                         </form>
+                        
                     <td>{{amount}} </td>
                     </td>
-                    <td colspan="7"><h3>Grand total: $ {{ grand_subtotal }}</h3></td>
                     <td>
                     <form action="{{ url_for('.delete_invoice',invoice = orders.invoice)}}" method="POST">
                         <button type="submit" class="btn btn-danger">Decline</button>
                     </form>
                     </td>
-
+                    {% endif %}
                     <td>
                         <form action="{{url_for('.get_pdf', invoice = orders.invoice)}}" method="POST">
                             <button type="submit" class="btn btn-info">Get PDF</button>
                         </form>
                     </td>
+                    <td colspan="7"><h3>Grand total: $ {{ grand_subtotal }}</h3></td>
                 </tr>
 
 </table>

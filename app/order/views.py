@@ -3,6 +3,7 @@ import secrets
 import pdfkit
 import stripe
 from flask import (
+    current_app,
     flash,
     make_response,
     redirect,
@@ -14,12 +15,13 @@ from flask import (
 from flask_login import current_user, login_required
 
 from .. import db
-from ..models import CustomerOrder, User
+from ..models import Brand, Category, CustomerOrder, Product, User
 from . import order
 
+stripe.api_key = 'sk_test_51OQ76iCml4QlIMYOTlEwV6lL7PPj8z62nstHbLlO2HxIB63VQ4Xe9oraL0OtA5Stxd9g82agb23zdLXecspC6TPV00ViY4rMe6'
 
 def delete_unnecessary():
-    for key,product in session['Shoppingcart']:
+    for key, product in session['Shoppingcart'].items():
         session.modified = True
         del product['image']
         del product['colors']
@@ -27,12 +29,35 @@ def delete_unnecessary():
 
 
 @order.route('/payment', methods=['POST'])
+@login_required
 def payment():
-    return redirect(url_for('thanks'))
+    invoice = request.form.get('invoice')
+    order = CustomerOrder.query.filter_by(customer_id=current_user.id, invoice=invoice).\
+        order_by(CustomerOrder.id.desc()).first()
+    grand_subtotal = ('%.2f' % sum(
+        (float(product['price']) - (product['discount'] / 100) * float(product['price'])) * int(product['quantity'])
+        for product in order.orders.values()
+    ))
+    amount_for_stripe = int(float(grand_subtotal) * 100)
+    customer = stripe.Customer.create(
+        email = request.form['stripeEmail'],
+        source = request.form['stripeToken'],
+    )
+    charge = stripe.Charge.create(
+        customer = customer.id,
+        description = 'myshop',
+        amount=amount_for_stripe,
+        currency='usd',
+    )
+    order.status = 'Paid'
+    db.session.commit()
+    
+    return redirect(url_for('order.thanks'))
+
 
 @order.route('/thanks')
 def thanks():
-    pass
+    return render_template('order/thank.html')
 
 
 @order.route('/get_order')
@@ -73,9 +98,11 @@ def get_invoice(invoice):
         for product in order.orders.values()
     ))
     amount_for_stripe = int(float(grand_subtotal) * 100)
-
+    brands = Brand.query.join(Product, (Brand.id == Product.brand_id)).all()
+    categories = Category.query.join(Product, (Category.id == Product.category_id)).all()
     return render_template('order/order.html', invoice=invoice, customer=current_user, orders=order,
-                            grand_total=0, subtotal=0, grand_subtotal=grand_subtotal,amount_for_stripe=amount_for_stripe)
+                            grand_total=0, subtotal=0, grand_subtotal=grand_subtotal,amount_for_stripe=amount_for_stripe,
+                            brands=brands,categories=categories)
 
 
 @order.route('/decline/<invoice>', methods=['POST'])
